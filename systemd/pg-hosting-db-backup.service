@@ -1,0 +1,7 @@
+[Unit]
+Description=PG Hosting database-only backup (PostgreSQL and MariaDB/MySQL when installed)
+After=postgresql.service mariadb.service mysql.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/pg-vps-hosting/backup/database-backup.sh

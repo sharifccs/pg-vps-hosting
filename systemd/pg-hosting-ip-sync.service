@@ -1,0 +1,8 @@
+[Unit]
+Description=PG Hosting public IP refresh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/pg-vps-hosting/ip-sync.sh --quiet

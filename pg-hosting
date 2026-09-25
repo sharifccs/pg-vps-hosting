@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+BASE=/opt/pg-vps-hosting
+[ -d "$BASE" ] || { echo 'PG Hosting is not installed.' >&2; exit 1; }
+CMD=${1:-menu}
+case "$CMD" in
+  menu) exec bash "$BASE/menu.sh" ;;
+  status|info) exec bash "$BASE/status.sh" ;;
+  nameservers|ns) exec bash "$BASE/nameservers.sh" ;;
+  firewall|ports) exec bash "$BASE/firewall/port-profiles.sh" ;;
+  database|db) exec bash "$BASE/database/manager.sh" ;;
+  db-permissions|db-users) exec bash "$BASE/postgresql/permission-manager.sh" ;;
+  backup) exec bash "$BASE/backup/database-backup.sh" ;;
+  restore) exec bash "$BASE/backup/database-restore.sh" ;;
+  pgadmin-logs) exec docker logs --tail 200 -f pgadmin4 ;;
+  update) exec bash "$BASE/update.sh" ;;
+  uninstall|remove) exec bash "$BASE/uninstall.sh" ;;
+  ip-sync) exec bash "$BASE/ip-sync.sh" ;;
+  *)
+    cat <<'USAGE'
+Usage: pg-hosting [command]
+  menu          Main SSH management menu
+  status        Server/control-panel status
+  nameservers   Configure NS1/NS2 for Hestia user admin
+  firewall      MikroTik/OLT/VPN firewall profiles
+  database      Database create/import/export/password manager
+  db-permissions PostgreSQL users/passwords/privileges
+  backup        PostgreSQL database-only backup now
+  restore       Restore PostgreSQL logical backup
+  pgadmin-logs  Follow official pgAdmin container logs
+  ip-sync       Re-detect/update VPS IP in Hestia
+  update        Update Hestia and redeploy pgAdmin
+  uninstall     Addon uninstall / full hosting purge menu
+USAGE
+    exit 2
+    ;;
+esac

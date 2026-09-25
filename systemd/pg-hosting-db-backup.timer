@@ -1,0 +1,11 @@
+[Unit]
+Description=PG Hosting twice-daily PostgreSQL database backup
+
+[Timer]
+OnCalendar=*-*-* 03:15:00
+OnCalendar=*-*-* 15:15:00
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target
